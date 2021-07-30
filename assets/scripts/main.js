@@ -1,4 +1,6 @@
 // constants and variables
+const buttons = document.querySelectorAll('button');
+const body = document.querySelector('body');
 const Array = ['rock', 'paper', 'scissor'];
 let playerSection;
 let computerSection;
@@ -14,7 +16,7 @@ function random(number) {
 }
 
 function playRound(playerSection, computerSection) {
-  playerSection = playerSection.toLowerCase();
+  // playerSection = playerSection.toLowerCase();
   if (playerSection == computerSection) {
     return 'Game Tie!';
   } else if (playerSection == 'paper' && computerSection == 'rock') {
@@ -33,26 +35,36 @@ function playRound(playerSection, computerSection) {
 }
 
 
-function game() {
-  for (let i = 0; playerWon < 5 && computerWon < 5; i++) {
-    playerSection = window.prompt('Your turn :(rock,paper,scissor)');
+buttons.forEach((button) => {
+  button.addEventListener('click', () => {
+    playerSection = button.textContent;
     computerSection = computerPlay();
-    let winner = (playRound(playerSection, computerSection));
-    if (winner.substr(4, 1) === 'W') {
-      ++playerWon;
-    } else if (winner.substr(4, 1) === 'L') {
-      ++computerWon;
-    }
-    // console.log(winner.substr(4, 1))
-    // console.log(playerWon);
-    // console.log(computerWon);
-    console.log(winner);
-    if (playerWon == 5) {
-      return 'Congratulations! You won the Game.'
-    } else if (computerWon == 5) {
-      return 'OOPS! you Lost the Game.'
-    }
-  }
-}
+    let para = document.createElement('p');
+    para.textContent = playRound(playerSection, computerSection);
+    body.appendChild(para);
+    game(para);
+  });
+});
 
-console.log(game());
+// buttons.removeEventListner('click', game);
+function game(para) {
+  let winner = document.createElement('h3');
+  if (para.textContent.substr(4, 1) === 'W') {
+    ++playerWon;
+  } else if (para.textContent.substr(4, 1) === 'L') {
+    ++computerWon;
+  }
+  if (playerWon === 5) {
+    winner.textContent = 'Congratulations! You won the Game.'
+    // button.removeEventListener('click', game, false);
+  } else if (computerWon === 5) {
+    winner.textContent = 'OOPS! you Lost the Game.'
+    // button.removeEventListener('click', game, false);
+  }
+  let player = document.querySelector('.playerscore');
+  let computer = document.querySelector('.computerscore');
+  player.textContent = playerWon;
+  computer.textContent = computerWon;
+  body.appendChild(winner);
+  // console.log('tarak');
+}
